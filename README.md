@@ -1,6 +1,6 @@
 # N queen problem solving and process time comparison between Hill Climbing and Genetic Algorithm
 
-It working with Python 3 !
+It's working with Python 3 !
 
 ## Usage
 Hill Climbing Algorithm
@@ -17,6 +17,5 @@ For print detailed results
 python nqueen.py -hc -p
 python nqueen.py -ga -p
 ```
-
-Default board size is 8, for genetic algorithm default population size is 10
+Default board size is 8, for genetic algorithm default population size is 10..
 
