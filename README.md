@@ -3,17 +3,20 @@
 It working with Python 3 !
 
 ## Usage
+Hill Climbing Algorithm
 ```bash
 python nqueen.py -hc
 ```
-For Hill Climbing Algorithm
+Genetic Algorithm
 ```bash
 python nqueen.py -ga
 ```
-For Hill Genetic Algorithm
 
+For print detailed results
 ```bash
 python nqueen.py -hc -p
 python nqueen.py -ga -p
 ```
-For prints detailed results
+
+Default board size is 8, for genetic algorithm default population size is 10
+
