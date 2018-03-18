@@ -13,10 +13,24 @@ POPULATION_SIZE = 10
 # how many generations should I check
 # -1 for no generation limit. (search to find a result)
 GENERATION_SIZE = -1
-TEST_COUNT = 10
+TEST_COUNT = 25
 
 added_boards = []
 
+def print_board(board):
+    ''' prints current board in a nice way!'''
+    
+    for row in range(len(board)):
+        print("", end="|")
+
+        queen = board.index(row)
+        
+        for col in range(len(board)):
+            if col == queen:
+                print("Q", end="|")
+            else:
+                print("_", end="|")
+        print("")
 
 def get_h_cost(board):
     h = 0
@@ -116,6 +130,18 @@ def start_hill_climbing():
         finish = time.clock()
         process_time = finish - start
         total_time += process_time
+
+        if PRINT_ITERATIONS == True:
+            print("==================================================================")
+        if PRINT_ITERATIONS == True:
+            print("Correct Answer found in iteration %s" %
+                    iteration)
+        # print result as a one lined list
+        if PRINT_ITERATIONS == True:
+            print(board)
+        # print result as a nice game board
+        if PRINT_ITERATIONS == True:
+            print_board(board)
 
         print('\nResult : ', result+1, '\t\t', iteration, '\t\t\t',
               restart_count, '\t\t', format(process_time, '.6f'), '\t\t', board)
