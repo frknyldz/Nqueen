@@ -7,7 +7,7 @@ import copy
 PRINT_ITERATIONS = False
 # default values
 # size of board also shows how many queens are in game
-BOARD_SIZE = 15
+BOARD_SIZE = 8
 # size of each generation
 POPULATION_SIZE = 10
 # how many generations should I check
@@ -15,140 +15,122 @@ POPULATION_SIZE = 10
 GENERATION_SIZE = -1
 TEST_COUNT = 25
 
-added_boards = []
+class HillClimbQueens:
+	
+	
+	def __init__(self):
+		self.added_boards = []
+		self.board = self.random_restart()
+		self.iteration,self.restart_count,self.board = self.hill_climb(self.board)
+		
+	def random_restart(self):
+		board = [random.randint(0, BOARD_SIZE-1) for i in range(BOARD_SIZE)]
+		return board
+	
+	def result(self):
+		return self.iteration,self.restart_count,self.board
+	
+	def hill_climb(self,board):
 
-def print_board(board):
-    ''' prints current board in a nice way!'''
-    
-    for row in range(len(board)):
-        print("", end="|")
+		iteration = 0
+		restart_count = 0
+		while self.get_h_cost(board) != 0:
 
-        queen = board.index(row)
-        
-        for col in range(len(board)):
-            if col == queen:
-                print("Q", end="|")
-            else:
-                print("_", end="|")
-        print("")
+			self.added_boards.append(list(board))
+			if PRINT_ITERATIONS == True:
+				print("Iteration : ", iteration, ','.join(str(v)
+														  for v in board), 'h : ', self.get_h_cost(board))
+			board = self.make_move_steepest_hill(board)
+			iteration = iteration+1
 
-def get_h_cost(board):
-    h = 0
-    for i in range(len(board)):
-        # Check every column we haven't already checked
-        for j in range(i + 1, len(board)):
-            # Queens are in the same row
-            if board[i] == board[j]:
-                h += 1
-            # Get the difference between the current column
-            # and the check column
-            offset = j - i
-            # To be a diagonal, the check column value has to be
-            # equal to the current column value +/- the offset
-            if board[i] == board[j] - offset or board[i] == board[j] + offset:
-                h += 1
+			if list(board) in self.added_boards:
+				if PRINT_ITERATIONS == True:
+					print('Local min : Restarting ..')
+				board = self.random_restart()
+				restart_count = restart_count+1
+				del self.added_boards[:]
+		if PRINT_ITERATIONS == True:
+			print("Iteration : ", iteration, ','.join(str(v)
+													  for v in board), 'h : ', self.get_h_cost(board))
+													  
+			print("==================================================================")
+			print("Correct Answer found in iteration %s" %
+					iteration)
+			# print result as a one lined list
+			print(board)
+			# print result as a nice game board
+			self.print_board(board)											  
+		return iteration, restart_count, board
+	
+	
+	def make_move_steepest_hill(self,board):
 
-    return h
+		moves = {}
+		for col in range(len(board)):
 
+			for row in range(len(board)):
+				if board[col] == row:
+					# We don't need to evaluate the current
+					# position, we already know the h-value
+					continue
 
-def make_move_steepest_hill(board):
+				board_copy = list(board)
+				# Move the queen to the new row
+				board_copy[col] = row
+				moves[(col, row)] = self.get_h_cost(board_copy)
 
-    moves = {}
-    for col in range(len(board)):
+		best_moves = []
+		h_to_beat = self.get_h_cost(board)
+		for k, v in moves.items():
+			if v < h_to_beat:
+				h_to_beat = v
 
-        for row in range(len(board)):
-            if board[col] == row:
-                # We don't need to evaluate the current
-                # position, we already know the h-value
-                continue
+		for k, v in moves.items():
+			if v == h_to_beat:
+				best_moves.append(k)
 
-            board_copy = list(board)
-            # Move the queen to the new row
-            board_copy[col] = row
-            moves[(col, row)] = get_h_cost(board_copy)
+		# Pick a random best move
+		if len(best_moves) > 0:
+			pick = random.randint(0, len(best_moves) - 1)
+			col = best_moves[pick][0]
+			row = best_moves[pick][1]
+			board[col] = row
 
-    best_moves = []
-    h_to_beat = get_h_cost(board)
-    for k, v in moves.items():
-        if v < h_to_beat:
-            h_to_beat = v
+		return board
+		
+	def get_h_cost(self,board):
+		h = 0
+		for i in range(len(board)):
+			# Check every column we haven't already checked
+			for j in range(i + 1, len(board)):
+				# Queens are in the same row
+				if board[i] == board[j]:
+					h += 1
+				# Get the difference between the current column
+				# and the check column
+				offset = j - i
+				# To be a diagonal, the check column value has to be
+				# equal to the current column value +/- the offset
+				if board[i] == board[j] - offset or board[i] == board[j] + offset:
+					h += 1
 
-    for k, v in moves.items():
-        if v == h_to_beat:
-            best_moves.append(k)
+		return h
+	
+	def print_board(self,board):
+		''' prints current board in a nice way!'''
+		
+		for row in range(len(board)):
+			print("", end="|")
 
-    # Pick a random best move
-    if len(best_moves) > 0:
-        pick = random.randint(0, len(best_moves) - 1)
-        col = best_moves[pick][0]
-        row = best_moves[pick][1]
-        board[col] = row
+			queen = board.index(row)
+			
+			for col in range(len(board)):
+				if col == queen:
+					print("Q", end="|")
+				else:
+					print("_", end="|")
+			print("")
 
-    return board
-
-
-def random_restart():
-    board = [random.randint(0, BOARD_SIZE-1) for i in range(BOARD_SIZE)]
-    return board
-
-
-def hill_climb(board):
-
-    iteration = 0
-    restart_count = 0
-    while get_h_cost(board) != 0:
-
-        added_boards.append(list(board))
-        if PRINT_ITERATIONS == True:
-            print("Iteration : ", iteration, ','.join(str(v)
-                                                      for v in board), 'h : ', get_h_cost(board))
-        board = make_move_steepest_hill(board)
-        iteration = iteration+1
-
-        if list(board) in added_boards:
-            if PRINT_ITERATIONS == True:
-                print('Local min : Restarting ..')
-            board = random_restart()
-            restart_count = restart_count+1
-            del added_boards[:]
-    if PRINT_ITERATIONS == True:
-        print("Iteration : ", iteration, ','.join(str(v)
-                                                  for v in board), 'h : ', get_h_cost(board))
-    return iteration, restart_count, board
-
-
-def start_hill_climbing():
-    print(' '*16,BOARD_SIZE,'Queen Hill Climbing\n')
-    print(' '*16, 'Iteration', ' '*15, 'Restart',
-          ' '*8, 'Process Time', ' '*28, 'Last Board')
-    total_time = 0
-
-    for result in range(0, TEST_COUNT):
-        start = time.clock()
-        board = random_restart()
-        iteration, restart_count, board = hill_climb(board)
-        finish = time.clock()
-        process_time = finish - start
-        total_time += process_time
-
-        if PRINT_ITERATIONS == True:
-            print("==================================================================")
-        if PRINT_ITERATIONS == True:
-            print("Correct Answer found in iteration %s" %
-                    iteration)
-        # print result as a one lined list
-        if PRINT_ITERATIONS == True:
-            print(board)
-        # print result as a nice game board
-        if PRINT_ITERATIONS == True:
-            print_board(board)
-
-        print('Result : ', result+1, '\t\t', iteration, '\t\t\t',
-              restart_count, '\t\t', format(process_time, '.6f'), '\t\t', board)
-        print('-'*112)
-    if TEST_COUNT>1:    
-        print('Avg Process Time of ',TEST_COUNT,' Result : ',
-          format(total_time/TEST_COUNT, '.6f'))
 
 
 class Board:
@@ -265,8 +247,7 @@ class GaQueens:
                     # print result as a one lined list
                     if PRINT_ITERATIONS == True:
                         print(population.queens)
-                    # print result as a nice game board
-                    if PRINT_ITERATIONS == True:
+                    # print result as a nice game board                    
                         population.print_board()
                     self.result_board.append(list(population.queens))
 
@@ -351,6 +332,33 @@ class GaQueens:
                 print("%8d : (%d) %s" %
                       (count, population.fitness, str(population.queens)))
                 count += 1
+
+				
+				
+	
+
+def start_hill_climbing():
+    print(' '*16,BOARD_SIZE,'Queen Hill Climbing\n')
+    print(' '*16, 'Iteration', ' '*15, 'Restart',
+          ' '*8, 'Process Time', ' '*28, 'Last Board')
+    total_time = 0
+
+    for result in range(0, TEST_COUNT):
+        start = time.clock()
+        
+        iteration, restart_count, board = HillClimbQueens().result()
+        finish = time.clock()
+        process_time = finish - start
+        total_time += process_time
+
+      
+
+        print('Result : ', result+1, '\t\t', iteration, '\t\t\t',
+              restart_count, '\t\t', format(process_time, '.6f'), '\t\t', board)
+        print('-'*112)
+    if TEST_COUNT>1:    
+        print('Avg Process Time of ',TEST_COUNT,' Result : ',
+          format(total_time/TEST_COUNT, '.6f'))
 
 
 def start_genetic_algorithm():
