@@ -7,7 +7,7 @@ import copy
 PRINT_ITERATIONS = False
 # default values
 # size of board also shows how many queens are in game
-BOARD_SIZE = 8
+BOARD_SIZE = 15
 # size of each generation
 POPULATION_SIZE = 10
 # how many generations should I check
@@ -118,7 +118,7 @@ def hill_climb(board):
 
 
 def start_hill_climbing():
-    print(' '*16, '8 Queen Hill Climbing\n')
+    print(' '*16,BOARD_SIZE,'Queen Hill Climbing\n')
     print(' '*16, 'Iteration', ' '*15, 'Restart',
           ' '*8, 'Process Time', ' '*28, 'Last Board')
     total_time = 0
@@ -143,10 +143,11 @@ def start_hill_climbing():
         if PRINT_ITERATIONS == True:
             print_board(board)
 
-        print('\nResult : ', result+1, '\t\t', iteration, '\t\t\t',
+        print('Result : ', result+1, '\t\t', iteration, '\t\t\t',
               restart_count, '\t\t', format(process_time, '.6f'), '\t\t', board)
         print('-'*112)
-    print('Avg Process Time of ',TEST_COUNT,' Result : ',
+    if TEST_COUNT>1:    
+        print('Avg Process Time of ',TEST_COUNT,' Result : ',
           format(total_time/TEST_COUNT, '.6f'))
 
 
@@ -361,7 +362,7 @@ def start_genetic_algorithm():
     print("    generation size : ", GENERATION_SIZE)
     print("==================================================================")
 
-    print(' '*18, '8 Queen Genetic Algorithm\n')
+    print(' '*18,BOARD_SIZE,'Queen Genetic Algorithm\n')
     print(' '*18, 'Generation Count', ' '*16,
           'Process Time', ' '*32, 'Results')
     total_time = 0
@@ -377,7 +378,8 @@ def start_genetic_algorithm():
         print('Result : ', result+1, '\t\t\t', generation, '\t\t\t',
               format(process_time, '.6f'), '\t\t', results)
         print('-'*112)
-    print('Avg Process Time of ',TEST_COUNT,' Result : ',
+    if TEST_COUNT>1:
+        print('Avg Process Time of ',TEST_COUNT,' Result : ',
           format(total_time/TEST_COUNT, '.6f'))
 
 
@@ -388,13 +390,16 @@ def main():
         if (len(sys.argv) > 2) and sys.argv[2] == "-p":
 
             global PRINT_ITERATIONS
+            global TEST_COUNT
             PRINT_ITERATIONS = True
+            TEST_COUNT = 1
         start_hill_climbing()
     elif (len(sys.argv) > 1) and sys.argv[1] == "-ga":
 
         if (len(sys.argv) > 2) and sys.argv[2] == "-p":
 
             PRINT_ITERATIONS = True
+            TEST_COUNT  = 1
         start_genetic_algorithm()
     else:
         print("Hill Climbing  -hc\nGenetic Algorithm -ga\nPrint Iterations -p")
