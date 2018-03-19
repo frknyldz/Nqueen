@@ -16,8 +16,6 @@ GENERATION_SIZE = -1
 TEST_COUNT = 25
 
 class HillClimbQueens:
-	
-	
 	def __init__(self):
 		self.added_boards = []
 		self.board = self.random_restart()
@@ -26,10 +24,10 @@ class HillClimbQueens:
 	def random_restart(self):
 		board = [random.randint(0, BOARD_SIZE-1) for i in range(BOARD_SIZE)]
 		return board
-	
+
 	def result(self):
 		return self.iteration,self.restart_count,self.board
-	
+
 	def hill_climb(self,board):
 
 		iteration = 0
@@ -38,8 +36,7 @@ class HillClimbQueens:
 
 			self.added_boards.append(list(board))
 			if PRINT_ITERATIONS == True:
-				print("Iteration : ", iteration, ','.join(str(v)
-														  for v in board), 'h : ', self.get_h_cost(board))
+				print("Iteration : ", iteration, ','.join(str(v) for v in board), 'h : ', self.get_h_cost(board))
 			board = self.make_move_steepest_hill(board)
 			iteration = iteration+1
 
@@ -50,8 +47,7 @@ class HillClimbQueens:
 				restart_count = restart_count+1
 				del self.added_boards[:]
 		if PRINT_ITERATIONS == True:
-			print("Iteration : ", iteration, ','.join(str(v)
-													  for v in board), 'h : ', self.get_h_cost(board))
+			print("Iteration : ", iteration, ','.join(str(v) for v in board), 'h : ', self.get_h_cost(board))
 													  
 			print("==================================================================")
 			print("Correct Answer found in iteration %s" %
@@ -61,8 +57,8 @@ class HillClimbQueens:
 			# print result as a nice game board
 			self.print_board(board)											  
 		return iteration, restart_count, board
-	
-	
+
+
 	def make_move_steepest_hill(self,board):
 
 		moves = {}
@@ -115,7 +111,7 @@ class HillClimbQueens:
 					h += 1
 
 		return h
-	
+
 	def print_board(self,board):
 		''' prints current board in a nice way!'''
 		
@@ -199,139 +195,139 @@ class Board:
 
 
 class GaQueens:
-    def __init__(self, board_size, population_size, generation_size):
-        # store values to class properties
-        self.board_size = board_size
-        self.population_size = population_size
-        self.generation_size = generation_size
-        self.result_board = []
-        # counts how many generations checked
-        self.generation_count = 0
-        # fitness value of goal
-        self.goal = int((self.board_size*(self.board_size-1))/2)
+	def __init__(self, board_size, population_size, generation_size):
+		# store values to class properties
+		self.board_size = board_size
+		self.population_size = population_size
+		self.generation_size = generation_size
+		self.result_board = []
+		# counts how many generations checked
+		self.generation_count = 0
+		# fitness value of goal
+		self.goal = int((self.board_size*(self.board_size-1))/2)
 
-        # current populations will go here
-        self.population = []
+		# current populations will go here
+		self.population = []
 
-        # creates the first population
-        self.first_generation()
+		# creates the first population
+		self.first_generation()
 
-        while True:
-            # if current population reached goal stop checking
-            if self.is_goal_reached() == True:
-                break
-            # don't create more generations if program reached generation_size
-            if -1 < self.generation_size <= self.generation_count:
-                break
+		while True:
+			# if current population reached goal stop checking
+			if self.is_goal_reached() == True:
+				break
+			# don't create more generations if program reached generation_size
+			if -1 < self.generation_size <= self.generation_count:
+				break
 
-            # create another generation from last generation
-            # (discards old generation)
-            self.next_generation()
-        if PRINT_ITERATIONS == True:
-            print("==================================================================")
+			# create another generation from last generation
+			# (discards old generation)
+			self.next_generation()
+		if PRINT_ITERATIONS == True:
+			print("==================================================================")
 
-        # if couldn't find answer
-        if -1 < self.generation_size <= self.generation_count:
-            if PRINT_ITERATIONS == True:
-                print("Couldn't find result in %d generations" %
-                      self.generation_count)
-                # if there was a result, print it
-                pass
-        elif self.is_goal_reached():
-            if PRINT_ITERATIONS == True:
-                print("Correct Answer found in generation %s" %
-                      self.generation_count)
-            for population in self.population:
-                if population.fitness == self.goal:
+		# if couldn't find answer
+		if -1 < self.generation_size <= self.generation_count:
+			if PRINT_ITERATIONS == True:
+				print("Couldn't find result in %d generations" %
+					  self.generation_count)
+				# if there was a result, print it
+				pass
+		elif self.is_goal_reached():
+			if PRINT_ITERATIONS == True:
+				print("Correct Answer found in generation %s" %
+					  self.generation_count)
+			for population in self.population:
+				if population.fitness == self.goal:
 
-                    # print result as a one lined list
-                    if PRINT_ITERATIONS == True:
-                        print(population.queens)
-                    # print result as a nice game board                    
-                        population.print_board()
-                    self.result_board.append(list(population.queens))
+					# print result as a one lined list
+					if PRINT_ITERATIONS == True:
+						print(population.queens)
+					# print result as a nice game board                    
+						population.print_board()
+					self.result_board.append(list(population.queens))
 
-    def result(self):
-        return self.generation_count, self.result_board
+	def result(self):
+		return self.generation_count, self.result_board
 
-    def __del__(self):
-        pass
+	def __del__(self):
+		pass
 
-    def is_goal_reached(self):
-        ''' returns True if current population reached goal'''
-        for population in self.population:
-            if population.fitness == self.goal:
-                return True
-        return False
+	def is_goal_reached(self):
+		''' returns True if current population reached goal'''
+		for population in self.population:
+			if population.fitness == self.goal:
+				return True
+		return False
 
-    def random_selection(self):
-        ''' select some items from current population for next generation
-        selection are items with highest fit value
-        returns a list of selections'''
-        population_list = []
-        for i in range(len(self.population)):
-            population_list.append((i, self.population[i].fitness))
-        population_list.sort(key=lambda pop_item: pop_item[1], reverse=True)
-        return population_list[:int(len(population_list)/3)]
+	def random_selection(self):
+		''' select some items from current population for next generation
+		selection are items with highest fit value
+		returns a list of selections'''
+		population_list = []
+		for i in range(len(self.population)):
+			population_list.append((i, self.population[i].fitness))
+		population_list.sort(key=lambda pop_item: pop_item[1], reverse=True)
+		return population_list[:int(len(population_list)/3)]
 
-    def first_generation(self):
-        ''' creates the first generation '''
-        for i in range(self.population_size):
-            self.population.append(Board(self.board_size, self.goal))
-        if PRINT_ITERATIONS == True:
-            self.print_population()
+	def first_generation(self):
+		''' creates the first generation '''
+		for i in range(self.population_size):
+			self.population.append(Board(self.board_size, self.goal))
+		if PRINT_ITERATIONS == True:
+			self.print_population()
 
-    def next_generation(self):
-        ''' creates next generations (all except first one)'''
+	def next_generation(self):
+		''' creates next generations (all except first one)'''
 
-        # add to generation counter
-        self.generation_count += 1
+		# add to generation counter
+		self.generation_count += 1
 
-        # get a list of selections to create next generation
-        selections = self.random_selection()
+		# get a list of selections to create next generation
+		selections = self.random_selection()
 
-        # creates a new population using given selection
-        new_population = []
-        while len(new_population) < self.population_size:
-            sel = random.choice(selections)[0]
-            new_population.append(copy.deepcopy(self.population[sel]))
-        self.population = new_population
+		# creates a new population using given selection
+		new_population = []
+		while len(new_population) < self.population_size:
+			sel = random.choice(selections)[0]
+			new_population.append(copy.deepcopy(self.population[sel]))
+		self.population = new_population
 
-        # make random changes to current population
-        for population in self.population:
-            population.regenerate()
-        if PRINT_ITERATIONS == True:
-            self.print_population(selections)
+		# make random changes to current population
+		for population in self.population:
+			population.regenerate()
+		if PRINT_ITERATIONS == True:
+			self.print_population(selections)
 
-    def print_population(self, selections=None):
-        ''' print all items in current population
-        Population #15
-            Using: [1]
-            0 : (25) [6, 1, 3, 0, 2, 4, 7, 5]
-        line 1: Population #15
-            shows current population id
-        line 2: Using: [1]
-            shows id of items from last generation
-            used for creating current generation
-        line 3: 0 : (25) [0, 1, 2, 3, 4, 5, 6, 7]
-            0 -> item is
-            (25) -> fitness for current item
-            [0, 1, 2, 3, 4, 5, 7] -> queen positions in current item
-        '''
-        if PRINT_ITERATIONS == True:
-            print("Population #%d" % self.generation_count)
+	def print_population(self, selections=None):
+		''' print all items in current population
+		Population #15
+			Using: [1]
+			0 : (25) [6, 1, 3, 0, 2, 4, 7, 5]
+		line 1: Population #15
+			shows current population id
+		line 2: Using: [1]
+			shows id of items from last generation
+			used for creating current generation
+		line 3: 0 : (25) [0, 1, 2, 3, 4, 5, 6, 7]
+			0 -> item is
+			(25) -> fitness for current item
+			[0, 1, 2, 3, 4, 5, 7] -> queen positions in current item
+		'''
+		if PRINT_ITERATIONS == True:
+			print("Population #%d" % self.generation_count)
 
-        if selections == None:
-            selections = []
-        if PRINT_ITERATIONS == True:
-            print("       Using: %s" % str([sel[0] for sel in selections]))
+		if selections == None:
+			selections = []
+		if PRINT_ITERATIONS == True:
+			print("       Using: %s" % str([sel[0] for sel in selections]))
 
-        count = 0
-        for population in self.population:
-            if PRINT_ITERATIONS == True:
-                print("%8d : (%d) %s" %
-                      (count, population.fitness, str(population.queens)))
-                count += 1
+		count = 0
+		for population in self.population:
+			if PRINT_ITERATIONS == True:
+				print("%8d : (%d) %s" %
+					  (count, population.fitness, str(population.queens)))
+				count += 1
 
 				
 				
@@ -410,7 +406,7 @@ def main():
             TEST_COUNT  = 1
         start_genetic_algorithm()
     else:
-        print("Hill Climbing  -hc\nGenetic Algorithm -ga\nPrint Iterations -p")
+        print("Example Usages\nHill Climbing --> python nqueen.py -hc\nGenetic Algorithm --> python nqueen.py -ga\nPrint Iterations --> python nqueen.py -hc -p")
 
 
 if __name__ == "__main__":
