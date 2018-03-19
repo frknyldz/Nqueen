@@ -330,8 +330,11 @@ class GaQueens:
 
 
 def start_hill_climbing():
+
     print(' ' * 16, BOARD_SIZE, 'Queen Hill Climbing\n')
-    print(' ' * 16, 'Iteration', ' ' * 15, 'Restart',
+    if PRINT_ITERATIONS == False:
+
+        print(' ' * 16, 'Iteration', ' ' * 15, 'Restart',
           ' ' * 8, 'Process Time', ' ' * 28, 'Last Board')
     total_time = 0
 
@@ -359,8 +362,10 @@ def start_genetic_algorithm():
     print("    generation size : ", GENERATION_SIZE)
     print("==================================================================")
 
+
     print(' ' * 18, BOARD_SIZE, 'Queen Genetic Algorithm\n')
-    print(' ' * 18, 'Generation Count', ' ' * 16,
+    if PRINT_ITERATIONS == False:
+        print(' ' * 18, 'Generation Count', ' ' * 16,
           'Process Time', ' ' * 32, 'Results')
     total_time = 0
     for result in range(0, TEST_COUNT):
