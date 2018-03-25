@@ -332,10 +332,9 @@ class GaQueens:
 def start_hill_climbing():
 
     print(' ' * 16, BOARD_SIZE, 'Queen Hill Climbing\n')
-    if PRINT_ITERATIONS == False:
-
-        print(' ' * 16, 'Iteration', ' ' * 15, 'Restart',
-          ' ' * 8, 'Process Time', ' ' * 28, 'Last Board')
+    
+    print(' ' * 16, 'Iteration', ' ' * 15, 'Restart',
+        ' ' * 8, 'Process Time', ' ' * 28, 'Last Board')
     total_time = 0
 
     for result in range(0, TEST_COUNT):
@@ -347,11 +346,11 @@ def start_hill_climbing():
         total_time += process_time
 
         print('Result : ', result + 1, '\t\t', iteration, '\t\t\t',
-              restart_count, '\t\t', format(process_time, '.6f'), '\t\t', board)
+              restart_count, '\t\t', format(process_time, '.6f'),'ms', '\t\t', board)
         print('-' * 112)
     if TEST_COUNT > 1:
         print('Avg Process Time of ', TEST_COUNT, ' Result : ',
-              format(total_time / TEST_COUNT, '.6f'))
+              format(total_time / TEST_COUNT, '.6f'),'ms')
 
 
 def start_genetic_algorithm():
@@ -364,9 +363,9 @@ def start_genetic_algorithm():
 
 
     print(' ' * 18, BOARD_SIZE, 'Queen Genetic Algorithm\n')
-    if PRINT_ITERATIONS == False:
-        print(' ' * 18, 'Generation Count', ' ' * 16,
-          'Process Time', ' ' * 32, 'Results')
+    
+    print(' ' * 18, 'Generation Count', ' ' * 16,
+        'Process Time', ' ' * 32, 'Results')
     total_time = 0
     for result in range(0, TEST_COUNT):
         # Run!
@@ -378,11 +377,11 @@ def start_genetic_algorithm():
         total_time += process_time
 
         print('Result : ', result + 1, '\t\t\t', generation, '\t\t\t',
-              format(process_time, '.6f'), '\t\t', results)
+              format(process_time, '.6f'),'ms', '\t\t', results)
         print('-' * 112)
     if TEST_COUNT > 1:
         print('Avg Process Time of ', TEST_COUNT, ' Result : ',
-              format(total_time / TEST_COUNT, '.6f'))
+              format(total_time / TEST_COUNT, '.6f'),'ms')
 
 
 def main():
