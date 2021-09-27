@@ -338,10 +338,10 @@ def start_hill_climbing():
     total_time = 0
 
     for result in range(0, TEST_COUNT):
-        start = time.clock()
+        start = time.process_time()
 
         iteration, restart_count, board = HillClimbQueens().result()
-        finish = time.clock()
+        finish = time.process_time()
         process_time = finish - start
         total_time += process_time
 
@@ -369,10 +369,10 @@ def start_genetic_algorithm():
     total_time = 0
     for result in range(0, TEST_COUNT):
         # Run!
-        start = time.clock()
+        start = time.process_time()
         generation, results = GaQueens(
             BOARD_SIZE, POPULATION_SIZE, GENERATION_SIZE).result()
-        finish = time.clock()
+        finish = time.process_time()
         process_time = finish - start
         total_time += process_time
 
@@ -400,8 +400,7 @@ def main():
             TEST_COUNT = 1
         start_genetic_algorithm()
     else:
-        print(
-            "Example Usages\nHill Climbing --> python nqueen.py -hc\nGenetic Algorithm --> python nqueen.py -ga\nPrint Iterations --> python nqueen.py -hc -p")
+        print("Example Usages\nHill Climbing --> python nqueen.py -hc\nGenetic Algorithm --> python nqueen.py -ga\nPrint Iterations --> python nqueen.py -hc -p")
 
 
 if __name__ == "__main__":
